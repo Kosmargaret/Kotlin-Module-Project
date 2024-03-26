@@ -33,9 +33,7 @@ class NotesApp {
         while(true){
             println("Введите имя архива:")
             val archiveName = scanner.nextLine()
-            if(archiveName.trim().isNullOrEmpty()){
-                println("Имя не может состоять только из пробелов: ")
-            }else{
+            if(validString(archiveName)){
                 archives.add(Archive(archiveName, mutableListOf()))
                 break
             }
@@ -47,7 +45,7 @@ class NotesApp {
         while (true) {
             println("Заметки в ${archive.name}:")
             archive.notes.forEachIndexed { index, note ->
-                println("$index. ${note.noteText}")
+                println("$index. ${note.name}")
             }
             println("${archive.notes.size}. Создать заметку")
             println("${archive.notes.size + 1}. Выход")
@@ -66,15 +64,28 @@ class NotesApp {
     private fun createNote(archive: Archive) {
         val scanner = Scanner(System.`in`)
         while(true){
-            println("Введите текст заметки")
-            val noteText = scanner.nextLine()
-            if(noteText.trim().isNullOrEmpty()){
-                println("Текст не может состоять только из пробелов: ")
-            }else{
-                archive.notes.add(Note(noteText))
+            println("Введите имя заметки")
+            val noteName = scanner.nextLine()
+            if(validString(noteName)){
+                while(true){
+                    println("Введите текст заметки")
+                    val noteText = scanner.nextLine()
+                    if(validString(noteText)){
+                        archive.notes.add(Note(noteName, noteText))
+                        break
+                    }
+                }
                 break
             }
         }
+
+    }
+    private fun validString(a: String): Boolean {
+        if(a.trim().isEmpty()) {
+            println("Пустая строка не допустима: ")
+            return false
+        }
+        return true
 
     }
 
